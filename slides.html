@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== OGP / SNS シェア用メタタグ ===== -->
+  <title>Headless360を見せ合う会 LT — 株式会社アップス・アンド・パートナーズ</title>
+  <meta name="description" content="GmailとSalesforceをClaude Codeで自動化した話。2026.06.05 Headless360 LT 参考資料">
+  <meta property="og:title" content="Headless360を見せ合う会 LT">
+  <meta property="og:description" content="GmailとSalesforceをClaude Codeで自動化した話。花戸俊介 / 株式会社アップス・アンド・パートナーズ">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://slides.apps-p.com/ogp.png"><!-- OGP画像は別途用意 -->
+  <meta property="og:url" content="https://slides.apps-p.com/">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Headless360を見せ合う会 LT">
+  <meta name="twitter:description" content="GmailとSalesforceをClaude Codeで自動化した話">
+
+  <!-- PDF.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --border: #2a2a2a;
+      --accent: #c9607a;
+      --accent2: #e8a0b0;
+      --text: #f0ede8;
+      --muted: #888;
+      --radius: 8px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── ヘッダー ── */
+    header {
+      padding: 18px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: var(--surface);
+    }
+    .header-left h1 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+    .header-left p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+    .badge {
+      background: var(--accent);
+      color: #fff;
+      font-size: 11px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+    }
+
+    /* ── メインレイアウト ── */
+    .main-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px;
+      gap: 16px;
+    }
+
+    /* ── スライドキャンバス ── */
+    #canvas-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 860px;
+      background: #000;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,.7);
+      aspect-ratio: 16/9;
+      cursor: pointer;
+    }
+    #slide-canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    /* クリックエリア（前/次） */
+    .click-zone {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 40%;
+      opacity: 0;
+    }
+    #zone-prev { left: 0; cursor: w-resize; }
+    #zone-next { right: 0; cursor: e-resize; }
+
+    /* ローディング */
+    #loading-overlay {
+      position: absolute;
+      inset: 0;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 10;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    #loading-overlay p { font-size: 13px; color: var(--muted); }
+
+    /* ── コントロールバー ── */
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 860px;
+    }
+    .btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+    .btn:hover { background: #242424; border-color: #444; }
+    .btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .btn-accent {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+    .btn-accent:hover { background: #b85470; border-color: #b85470; }
+
+    .page-info {
+      flex: 1;
+      text-align: center;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .page-info strong { color: var(--text); }
+
+    /* ── プログレスバー ── */
+    .progress-wrap {
+      width: 100%;
+      max-width: 860px;
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    #progress-bar {
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.25s ease;
+      border-radius: 2px;
+    }
+
+    /* ── サムネイル ── */
+    .thumbs-section {
+      width: 100%;
+      max-width: 860px;
+    }
+    .thumbs-header {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .thumbs-header button {
+      background: none;
+      border: none;
+      color: var(--accent2);
+      font-size: 12px;
+      cursor: pointer;
+      padding: 0;
+    }
+    #thumbs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 8px;
+    }
+    .thumb-item {
+      background: #111;
+      border: 2px solid transparent;
+      border-radius: 5px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.15s, transform 0.15s;
+      position: relative;
+    }
+    .thumb-item:hover { transform: scale(1.03); }
+    .thumb-item.active { border-color: var(--accent); }
+    .thumb-item canvas { display: block; width: 100%; }
+    .thumb-num {
+      position: absolute;
+      bottom: 3px;
+      right: 5px;
+      font-size: 10px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ── フッター ── */
+    footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--muted);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    footer a { color: var(--accent2); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── キーボードヒント ── */
+    .key-hint {
+      font-size: 11px;
+      color: #555;
+      text-align: center;
+    }
+    kbd {
+      background: #2a2a2a;
+      border: 1px solid #444;
+      border-radius: 3px;
+      padding: 1px 6px;
+      font-size: 10px;
+      color: #aaa;
+    }
+
+    /* ── フルスクリーン ── */
+    #canvas-wrap:-webkit-full-screen { max-width: 100vw; aspect-ratio: unset; height: 100vh; }
+    #canvas-wrap:-moz-full-screen { max-width: 100vw; aspect-ratio: unset; height: 100vh; }
+    #canvas-wrap:fullscreen { max-width: 100vw; aspect-ratio: unset; height: 100vh; }
+
+    /* ── レスポンシブ ── */
+    @media (max-width: 600px) {
+      .controls { flex-wrap: wrap; }
+      #thumbs-grid { grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); }
+      .btn { padding: 8px 12px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Headless360を見せ合う会 LT 参考資料</h1>
+    <p>花戸 俊介 ／ 株式会社アップス・アンド・パートナーズ ／ 2026.06.05</p>
+  </div>
+  <span class="badge">広告なし・自社配信</span>
+</header>
+
+<div class="main-wrap">
+
+  <!-- スライド本体 -->
+  <div id="canvas-wrap">
+    <div id="loading-overlay">
+      <div class="spinner"></div>
+      <p>スライドを読み込み中...</p>
+    </div>
+    <canvas id="slide-canvas"></canvas>
+    <div class="click-zone" id="zone-prev"></div>
+    <div class="click-zone" id="zone-next"></div>
+  </div>
+
+  <!-- プログレス -->
+  <div class="progress-wrap">
+    <div id="progress-bar" style="width:0%"></div>
+  </div>
+
+  <!-- コントロール -->
+  <div class="controls">
+    <button class="btn" id="btn-prev" disabled>← 前へ</button>
+    <span class="page-info"><strong id="cur-page">1</strong> / <span id="total-pages">—</span></span>
+    <button class="btn" id="btn-next" disabled>次へ →</button>
+    <button class="btn btn-accent" id="btn-fs">⛶ 全画面</button>
+  </div>
+
+  <p class="key-hint">
+    <kbd>←</kbd> <kbd>→</kbd> キー または スライドをクリックで移動
+  </p>
+
+  <!-- サムネイル -->
+  <div class="thumbs-section">
+    <div class="thumbs-header">
+      全スライド一覧
+      <button onclick="toggleThumbs()">▼ 表示切替</button>
+    </div>
+    <div id="thumbs-grid"></div>
+  </div>
+
+</div>
+
+<footer>
+  <span>© 2026 株式会社アップス・アンド・パートナーズ — <a href="https://apps-p.com" target="_blank">apps-p.com</a></span>
+  <span>Powered by PDF.js ／ Cloudflare Pages で自社配信</span>
+</footer>
+
+<script>
+  // =============================================
+  // PDF.js 設定
+  // =============================================
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  const PDF_URL = './Headless360を見せ合う会_20260605.pdf'; // ← PDFと同じフォルダに置く
+
+  let pdfDoc = null;
+  let currentPage = 1;
+  let totalPages = 0;
+  let isRendering = false;
+  let thumbsVisible = true;
+
+  const canvas      = document.getElementById('slide-canvas');
+  const ctx         = canvas.getContext('2d');
+  const loading     = document.getElementById('loading-overlay');
+  const btnPrev     = document.getElementById('btn-prev');
+  const btnNext     = document.getElementById('btn-next');
+  const curPageEl   = document.getElementById('cur-page');
+  const totalEl     = document.getElementById('total-pages');
+  const progressBar = document.getElementById('progress-bar');
+  const thumbsGrid  = document.getElementById('thumbs-grid');
+
+  // ── PDFロード ──
+  pdfjsLib.getDocument(PDF_URL).promise.then(pdf => {
+    pdfDoc = pdf;
+    totalPages = pdf.numPages;
+    totalEl.textContent = totalPages;
+    loading.style.display = 'none';
+    btnNext.disabled = (totalPages <= 1);
+    renderPage(1);
+    renderAllThumbs();
+  }).catch(err => {
+    loading.innerHTML = `<p style="color:#e88">PDFの読み込みに失敗しました<br><small>${err.message}</small></p>`;
+  });
+
+  // ── ページ描画 ──
+  function renderPage(num) {
+    if (isRendering) return;
+    isRendering = true;
+    currentPage = num;
+    curPageEl.textContent = num;
+    progressBar.style.width = `${(num / totalPages) * 100}%`;
+    updateButtons();
+    updateActiveThumb();
+
+    pdfDoc.getPage(num).then(page => {
+      const wrap = document.getElementById('canvas-wrap');
+      const scale = wrap.clientWidth / page.getViewport({ scale: 1 }).width;
+      const viewport = page.getViewport({ scale });
+      canvas.width  = viewport.width;
+      canvas.height = viewport.height;
+
+      page.render({ canvasContext: ctx, viewport }).promise.then(() => {
+        isRendering = false;
+      });
+    });
+  }
+
+  // ── サムネイル全描画 ──
+  function renderAllThumbs() {
+    for (let i = 1; i <= totalPages; i++) {
+      const item = document.createElement('div');
+      item.className = 'thumb-item' + (i === 1 ? ' active' : '');
+      item.id = `thumb-${i}`;
+
+      const tc = document.createElement('canvas');
+      item.appendChild(tc);
+
+      const num = document.createElement('span');
+      num.className = 'thumb-num';
+      num.textContent = i;
+      item.appendChild(num);
+
+      item.addEventListener('click', () => renderPage(i));
+      thumbsGrid.appendChild(item);
+
+      pdfDoc.getPage(i).then(page => {
+        const vp = page.getViewport({ scale: 0.25 });
+        tc.width  = vp.width;
+        tc.height = vp.height;
+        page.render({ canvasContext: tc.getContext('2d'), viewport: vp });
+      });
+    }
+  }
+
+  function updateActiveThumb() {
+    document.querySelectorAll('.thumb-item').forEach(el => el.classList.remove('active'));
+    const t = document.getElementById(`thumb-${currentPage}`);
+    if (t) {
+      t.classList.add('active');
+      t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+    }
+  }
+
+  function updateButtons() {
+    btnPrev.disabled = (currentPage <= 1);
+    btnNext.disabled = (currentPage >= totalPages);
+  }
+
+  // ── ナビゲーション ──
+  function goNext() { if (currentPage < totalPages) renderPage(currentPage + 1); }
+  function goPrev() { if (currentPage > 1)          renderPage(currentPage - 1); }
+
+  btnNext.addEventListener('click', goNext);
+  btnPrev.addEventListener('click', goPrev);
+  document.getElementById('zone-next').addEventListener('click', goNext);
+  document.getElementById('zone-prev').addEventListener('click', goPrev);
+
+  // キーボード
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown')  goNext();
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')    goPrev();
+  });
+
+  // スワイプ（スマホ）
+  let touchStartX = 0;
+  canvas.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+  canvas.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) dx < 0 ? goNext() : goPrev();
+  });
+
+  // ── 全画面 ──
+  document.getElementById('btn-fs').addEventListener('click', () => {
+    const wrap = document.getElementById('canvas-wrap');
+    if (wrap.requestFullscreen)       wrap.requestFullscreen();
+    else if (wrap.webkitRequestFullscreen) wrap.webkitRequestFullscreen();
+  });
+
+  // ── サムネイル表示切替 ──
+  function toggleThumbs() {
+    thumbsVisible = !thumbsVisible;
+    thumbsGrid.style.display = thumbsVisible ? '' : 'none';
+  }
+</script>
+</body>
+</html>
