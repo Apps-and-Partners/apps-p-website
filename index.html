@@ -3,192 +3,296 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Apps and Partners — IoTデリバリーから、人とテクノロジーをつなぐプラットフォームへ。</title>
-  <meta name="description" content="株式会社アップス・アンド・パートナーズ。SaaS向けIoTデリバリー・AppExchange経営支援・Salesforce活用トレーニング・ITシニアマッチング。">
-  <link rel="stylesheet" href="css/style.css">
+  <title>資料ライブラリ — 株式会社アップス・アンド・パートナーズ</title>
+  <meta name="description" content="花戸俊介の登壇資料・LT資料ライブラリ。株式会社アップス・アンド・パートナーズ">
+  <meta property="og:title" content="資料ライブラリ — アップス・アンド・パートナーズ">
+  <meta property="og:description" content="花戸俊介の登壇資料・LT資料ライブラリ">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://apps-p-slides.pages.dev/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rose: #c9607a;
+      --rose-light: #e8a0b0;
+      --rose-dim: rgba(201,96,122,0.12);
+      --ink: #1a1614;
+      --paper: #faf8f5;
+      --muted: #9a8f8a;
+      --border: rgba(201,96,122,0.18);
+      --card-bg: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* ── 背景装飾 ── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(201,96,122,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── ヘッダー ── */
+    header {
+      padding: 56px 48px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .logo-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .logo-mark {
+      width: 32px; height: 32px;
+      border: 2px solid var(--rose);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-mark::after {
+      content: '';
+      width: 10px; height: 10px;
+      background: var(--rose);
+      border-radius: 50%;
+    }
+    .logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--rose);
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      line-height: 1.8;
+    }
+
+    /* ── 仕切り線 ── */
+    .divider {
+      max-width: 900px;
+      margin: 0 auto 48px;
+      padding: 0 48px;
+    }
+    .divider hr {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── カード一覧 ── */
+    .cards-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 48px 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--rose);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(201,96,122,0.12);
+      border-color: var(--rose-light);
+    }
+    .card:hover::before { transform: scaleY(1); }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .card-date {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .card-tag {
+      font-size: 11px;
+      background: var(--rose-dim);
+      color: var(--rose);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .card-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+      flex: 1;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+    }
+    .card-event {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .card-arrow {
+      width: 32px; height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      color: var(--rose);
+      transition: background 0.2s, border-color 0.2s;
+    }
+    .card:hover .card-arrow {
+      background: var(--rose);
+      color: #fff;
+      border-color: var(--rose);
+    }
+
+    /* ── フッター ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    footer p { font-size: 12px; color: var(--muted); }
+    footer a { color: var(--rose); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── レスポンシブ ── */
+    @media (max-width: 600px) {
+      header, .divider, .cards-wrap, footer { padding-left: 24px; padding-right: 24px; }
+      .cards-wrap { grid-template-columns: 1fr; }
+      header { padding-top: 36px; }
+    }
+
+    /* ── フェードイン ── */
+    .card {
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+    }
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.12s; }
+    .card:nth-child(3) { animation-delay: 0.19s; }
+    .card:nth-child(4) { animation-delay: 0.26s; }
+    .card:nth-child(5) { animation-delay: 0.33s; }
+    .card:nth-child(6) { animation-delay: 0.40s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <div class="nav__inner">
-      <div class="nav__logo">Apps <span>&amp;</span> Partners</div>
-      <ul class="nav__links">
-        <li><a href="index.html">Company</a></li>
-        <li><a href="service.html">Services</a></li>
-        <li><a href="security.html">Security</a></li>
-        <li><a href="mailto:info@apps-p.com">Contact</a></li>
-      </ul>
-      <div class="nav__accent"></div>
-    </div>
-  </nav>
-
-  <!-- HERO -->
-  <section class="hero">
-    <div class="hero__inner">
-      <div class="hero__eyebrow fade-up">Tokyo · Japan · Since 2014</div>
-      <h1 class="hero__title fade-up fade-up--1">
-        IoTデリバリーから、<br>
-        <em>人とテクノロジーをつなぐ</em><br>
-        プラットフォームへ。
-      </h1>
-      <div class="hero__origin fade-up fade-up--2">
-        <span class="hero__origin-badge">Origin</span>
-        <span class="hero__origin-text">日本・APAC初のAppExchange専門 経営・販促支援会社として2014年創業。累計12社以上をご支援。</span>
-      </div>
-      <p class="hero__sub fade-up fade-up--3">
-        SaaS向けIoTマシンデリバリーの現場から得た知見を活かし、<br>
-        ITシニア人材マッチングとSalesforce活用支援へ。<br>
-        事業の次のステージへ、ともに進みます。
-      </p>
-      <div class="hero__stats fade-up fade-up--4">
-        <div class="hero__stat">
-          <span class="hero__stat-n">500社+</span>
-          <span class="hero__stat-l">IoTデリバリー実績</span>
-        </div>
-        <div class="hero__stat">
-          <span class="hero__stat-n">12社+</span>
-          <span class="hero__stat-l">AppExchange支援実績</span>
-        </div>
-        <div class="hero__stat">
-          <span class="hero__stat-n">10年+</span>
-          <span class="hero__stat-l">APAC展開経験</span>
-        </div>
-      </div>
-      <div class="hero__stripe"></div>
-    </div>
-  </section>
-
-  <!-- SERVICES -->
-  <section class="section">
-    <div class="container">
-      <div class="section__label">Our Services</div>
-      <div class="section__title">事業領域</div>
-      <div class="svc-grid">
-
-        <a href="service.html#iot" class="svc-card">
-          <div class="svc-card__num">01</div>
-          <div class="svc-card__name">IoTデバイス<br>デリバリー</div>
-          <div class="svc-card__desc">Salesforce・Google Workspace・Dayforce・kintone対応のピットタッチ設置・リユース・サブスクリプション提供。国内最大手クラウドサービス向けに総合デリバリーを展開中。</div>
-          <div class="svc-card__arrow">詳細を見る →</div>
-        </a>
-
-        <a href="service.html#appexchange" class="svc-card">
-          <div class="svc-card__num">02</div>
-          <div class="svc-card__name">AppExchange<br>経営・販促支援</div>
-          <div class="svc-card__desc">仕様策定・販売戦略・ブランディングから、APAC展開・イベント企画・事務局運営まで。日本・APAC初の専門支援として10年以上の実績。</div>
-          <div class="svc-card__arrow">詳細を見る →</div>
-        </a>
-
-        <a href="service.html#training" class="svc-card">
-          <div class="svc-card__num">03</div>
-          <div class="svc-card__name">Salesforce<br>活用力強化トレーニング</div>
-          <div class="svc-card__desc">CLIとAIを活用した業務改善を、貴社が自走できるレベルまで引き上げるトレーニング。デリバリー先500社・イベント来場企業向けに展開予定。</div>
-          <div class="svc-card__tag">New</div>
-          <div class="svc-card__arrow">詳細を見る →</div>
-        </a>
-
-        <a href="service.html#senior" class="svc-card">
-          <div class="svc-card__num">04</div>
-          <div class="svc-card__name">ITシニア<br>スポットサポート</div>
-          <div class="svc-card__desc">IoT機器の設置・入替時にスポットで活躍するITシニア人材のマッチングプラットフォーム。スキル認定登録制による品質担保と副業・スポット就労を実現。</div>
-          <div class="svc-card__tag svc-card__tag--coming">Coming Soon</div>
-          <div class="svc-card__arrow">詳細を見る →</div>
-        </a>
-
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- PHILOSOPHY -->
-  <section class="section section--soft">
-    <div class="container">
-      <div class="section__label">Philosophy</div>
-      <div class="section__title">経営理念・行動方針</div>
-      <div class="phil-grid">
-        <div class="phil-card">
-          <div class="phil-card__title">経営理念</div>
-          <div class="phil-card__text">「社会の役に立つ」<br>企業アプリの特徴を活かし、様々な問題を一つひとつ、コツコツと解決することが当社の理念です。</div>
-        </div>
-        <div class="phil-card">
-          <div class="phil-card__title">行動方針</div>
-          <div class="phil-card__text">「一つひとつ、コツコツと。<br>それを、より多くの人々に」</div>
-        </div>
-        <div class="phil-card">
-          <div class="phil-card__title">コーポレートカラー</div>
-          <div class="phil-card__text">「銀色」<br>石のように積み重ねる堅実さ、燻し銀の深み、どんな色にも寄り添う柔軟性。</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- COMPANY OVERVIEW -->
-  <section class="section">
-    <div class="container">
-      <div class="section__label">Company</div>
-      <div class="section__title">会社概要</div>
-      <div class="overview-grid">
-        <div class="overview-text">
-          <p>株式会社アップス・アンド・パートナーズは、2014年10月に日本・APAC初のAppExchange専門支援会社として設立されました。</p>
-          <p>その後、IoTデバイスのデリバリー事業へと領域を拡張。現在は国内最大手クラウドサービス向けのIoTデリバリーを主軸に、Salesforce活用支援とITシニア人材マッチングへと進化を続けています。</p>
-          <p>東京・丸の内を拠点に、シンガポール・中国・台湾・香港・マレーシアなどAPAC地域での支援実績を持ちます。</p>
-        </div>
-        <div class="info-rows">
-          <div class="info-row">
-            <span class="info-key">会社名</span>
-            <span class="info-val">株式会社アップス・アンド・パートナーズ<br>Apps and Partners Co., Ltd.</span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">設立</span>
-            <span class="info-val">2014年10月3日</span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">所在地</span>
-            <span class="info-val">〒100-6208 東京都千代田区丸の内1-11-1<br>パシフィックセンチュリープレイス丸の内8階</span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">代表</span>
-            <span class="info-val">花戸 俊介（Shunsuke Hanato）</span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">決算</span>
-            <span class="info-val">1月末日</span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">連絡先</span>
-            <span class="info-val">info(a)apps-p.com</span>
-          </div>
-          <div class="info-row">
-            <span class="info-key">取引銀行</span>
-            <span class="info-val">三菱UFJ銀行 本店</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CTA -->
-  <div class="cta-bar">
-    <div>
-      <div class="cta-bar__text">お問い合わせ・ご相談はお気軽に</div>
-      <div class="cta-bar__sub">各サービスの詳細・お見積もりはメールにてご連絡ください</div>
-    </div>
-    <a href="mailto:info@apps-p.com" class="cta-bar__btn">Contact Us</a>
+<header>
+  <div class="logo-line">
+    <div class="logo-mark"></div>
+    <span class="logo-text">Apps &amp; Partners — Slides Library</span>
   </div>
+  <h1 class="hero-title">登壇<em>資料</em><br>ライブラリ</h1>
+  <p class="hero-sub">花戸 俊介 ／ 株式会社アップス・アンド・パートナーズ<br>講演・LTの参考資料を公開しています。</p>
+</header>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="footer__left">
-      Apps and Partners Co., Ltd.
-      <div class="footer__accent"></div>
+<div class="divider"><hr></div>
+
+<div class="cards-wrap">
+
+  <!-- ▼ 資料を追加するたびにここにカードを1枚追加するだけ ▼ -->
+
+  <a class="card" href="./headless360/">
+    <div class="card-meta">
+      <span class="card-date">2026.06.05</span>
+      <span class="card-tag">LT</span>
     </div>
-    <div class="footer__right">Copyright &copy; 2014&ndash;2025 Apps and Partners Co., Ltd.</div>
-  </footer>
+    <div class="card-title">GmailとSalesforceを<br>Claude Codeで自動化した話</div>
+    <div class="card-desc">注文メール処理・Salesforce一括登録・契約自動更新。Headless360を見せ合う会 参考資料。</div>
+    <div class="card-footer">
+      <span class="card-event">Headless360を見せ合う会</span>
+      <span class="card-arrow">→</span>
+    </div>
+  </a>
 
-  <script src="js/main.js"></script>
+  <!-- ▲ ここまで。次の資料はこの下にコピペ ▲ -->
+
+</div>
+
+<footer>
+  <p>© 2026 株式会社アップス・アンド・パートナーズ</p>
+  <p><a href="https://apps-p.com" target="_blank">apps-p.com</a></p>
+</footer>
+
 </body>
 </html>
