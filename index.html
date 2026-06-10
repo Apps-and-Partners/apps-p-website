@@ -191,6 +191,13 @@
       flex: 1;
     }
 
+    /* カード全体を覆う透明リンク（資料を開く） */
+    .card-link {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    /* フッターと矢印はオーバーレイより手前、ただし矢印自体はクリック透過 */
     .card-footer {
       display: flex;
       align-items: center;
@@ -198,11 +205,30 @@
       padding-top: 16px;
       border-top: 1px solid var(--border);
       margin-top: auto;
+      position: relative;
+      z-index: 2;
     }
+    /* Xリンクだけ別リンクとして反応させる */
     .card-event {
       font-size: 12px;
       color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      padding: 4px 8px;
+      margin: -4px -8px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+      position: relative;
+      z-index: 3;
     }
+    .card-event:hover {
+      color: var(--rose);
+      background: var(--rose-dim);
+    }
+    .card-event svg { flex-shrink: 0; opacity: 0.7; }
+    .card-event:hover svg { opacity: 1; }
     .card-arrow {
       width: 32px; height: 32px;
       border: 1px solid var(--border);
@@ -211,6 +237,7 @@
       font-size: 14px;
       color: var(--rose);
       transition: background 0.2s, border-color 0.2s;
+      pointer-events: none;
     }
     .card:hover .card-arrow {
       background: var(--rose);
@@ -276,7 +303,8 @@
 
   <!-- ▼ 資料を追加するたびにここにカードを1枚追加するだけ ▼ -->
 
-  <a class="card" href="./headless360/">
+  <div class="card">
+    <a class="card-link" href="./headless360/" aria-label="資料を開く"></a>
     <div class="card-meta">
       <span class="card-date">2026.06.05</span>
       <span class="card-tag">LT</span>
@@ -284,10 +312,13 @@
     <div class="card-title">Claude CodeでSalesforceを<br>自動処理しました。</div>
     <div class="card-desc">注文メール処理・Salesforce一括登録・契約自動更新。Headless360を見せ合う会 参考資料。</div>
     <div class="card-footer">
-      <span class="card-event">Headless360を見せ合う会</span>
+      <a class="card-event" href="https://x.com/Shunsuke_Hanato/status/2063080275186459023" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <span>Headless360を見せ合う会</span>
+      </a>
       <span class="card-arrow">→</span>
     </div>
-  </a>
+  </div>
 
   <!-- ▲ ここまで。次の資料はこの下にコピペ ▲ -->
 
