@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>資料ライブラリ — 株式会社アップス・アンド・パートナーズ</title>
+  <meta name="description" content="花戸俊介の登壇資料・LT資料ライブラリ。株式会社アップス・アンド・パートナーズ">
+  <meta property="og:title" content="資料ライブラリ — アップス・アンド・パートナーズ">
+  <meta property="og:description" content="花戸俊介の登壇資料・LT資料ライブラリ">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://apps-p-slides.pages.dev/">
+  <meta property="og:image" content="https://apps-p-slides.pages.dev/ogp.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="資料ライブラリ — アップス・アンド・パートナーズ">
+  <meta name="twitter:description" content="花戸俊介の登壇資料・LT資料ライブラリ">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --rose: #c9607a;
+      --rose-light: #e8a0b0;
+      --rose-dim: rgba(201,96,122,0.12);
+      --ink: #1a1614;
+      --paper: #faf8f5;
+      --muted: #9a8f8a;
+      --border: rgba(201,96,122,0.18);
+      --card-bg: #ffffff;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Noto Sans JP', sans-serif;
+      font-weight: 400;
+      min-height: 100vh;
+    }
+
+    /* ── 背景装飾 ── */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(201,96,122,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    /* ── ヘッダー ── */
+    header {
+      padding: 56px 48px 40px;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .logo-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .logo-mark {
+      width: 32px; height: 32px;
+      border: 2px solid var(--rose);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-mark::after {
+      content: '';
+      width: 10px; height: 10px;
+      background: var(--rose);
+      border-radius: 50%;
+    }
+    .logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 500;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--rose);
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      line-height: 1.8;
+    }
+
+    /* ── 仕切り線 ── */
+    .divider {
+      max-width: 900px;
+      margin: 0 auto 48px;
+      padding: 0 48px;
+    }
+    .divider hr {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── カード一覧 ── */
+    .cards-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 48px 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: var(--rose);
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform 0.25s ease;
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(201,96,122,0.12);
+      border-color: var(--rose-light);
+    }
+    .card:hover::before { transform: scaleY(1); }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .card-date {
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .card-tag {
+      font-size: 11px;
+      background: var(--rose-dim);
+      color: var(--rose);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+    }
+
+    .card-title {
+      font-family: 'Noto Sans JP', sans-serif;
+      font-size: 17px;
+      font-weight: 500;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+
+    .card-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+      flex: 1;
+    }
+
+    /* カード全体を覆う透明リンク（資料を開く） */
+    .card-link {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+    /* フッターと矢印はオーバーレイより手前、ただし矢印自体はクリック透過 */
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      margin-top: auto;
+      position: relative;
+      z-index: 2;
+    }
+    /* Xリンクだけ別リンクとして反応させる */
+    .card-event {
+      font-size: 12px;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      padding: 4px 8px;
+      margin: -4px -8px;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+      position: relative;
+      z-index: 3;
+    }
+    .card-event:hover {
+      color: var(--rose);
+      background: var(--rose-dim);
+    }
+    .card-event svg { flex-shrink: 0; opacity: 0.7; }
+    .card-event:hover svg { opacity: 1; }
+    .card-arrow {
+      width: 32px; height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      color: var(--rose);
+      transition: background 0.2s, border-color 0.2s;
+      pointer-events: none;
+    }
+    .card:hover .card-arrow {
+      background: var(--rose);
+      color: #fff;
+      border-color: var(--rose);
+    }
+
+    /* ── フッター ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 48px;
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    footer p { font-size: 12px; color: var(--muted); }
+    footer a { color: var(--rose); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── レスポンシブ ── */
+    @media (max-width: 600px) {
+      header, .divider, .cards-wrap, footer { padding-left: 24px; padding-right: 24px; }
+      .cards-wrap { grid-template-columns: 1fr; }
+      header { padding-top: 36px; }
+    }
+
+    /* ── フェードイン ── */
+    .card {
+      opacity: 0;
+      animation: fadeUp 0.5s ease forwards;
+    }
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.12s; }
+    .card:nth-child(3) { animation-delay: 0.19s; }
+    .card:nth-child(4) { animation-delay: 0.26s; }
+    .card:nth-child(5) { animation-delay: 0.33s; }
+    .card:nth-child(6) { animation-delay: 0.40s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-line">
+    <div class="logo-mark"></div>
+    <span class="logo-text">Apps &amp; Partners — Slides Library</span>
+  </div>
+  <h1 class="hero-title">登壇<em>資料</em><br>ライブラリ</h1>
+  <p class="hero-sub">花戸 俊介 ／ 株式会社アップス・アンド・パートナーズ<br>講演・LTの参考資料を公開しています。</p>
+</header>
+
+<div class="divider"><hr></div>
+
+<div class="cards-wrap">
+
+  <!-- ▼ 資料を追加するたびにここにカードを1枚追加するだけ ▼ -->
+
+  <div class="card">
+    <a class="card-link" href="./voice-salesforce/" aria-label="資料を開く"></a>
+    <div class="card-meta">
+      <span class="card-date">2026.06.13</span>
+      <span class="card-tag">実装メモ</span>
+    </div>
+    <div class="card-title">SalesforceのUIを通さず、<br>声で予定を入れる</div>
+    <div class="card-desc">スマホのClaudeに話しかけるだけで、Salesforceのカレンダーに予定が入る。非エンジニアが1日で組み上げた記録。</div>
+    <div class="card-footer">
+      <a class="card-event" href="VOICE_SALESFORCE_X_URL" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <span>実装メモ</span>
+      </a>
+      <span class="card-arrow">→</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <a class="card-link" href="./headless360/" aria-label="資料を開く"></a>
+    <div class="card-meta">
+      <span class="card-date">2026.06.05</span>
+      <span class="card-tag">LT</span>
+    </div>
+    <div class="card-title">Claude CodeでSalesforceを<br>自動処理しました。</div>
+    <div class="card-desc">注文メール処理・Salesforce一括登録・契約自動更新。Headless360を見せ合う会 参考資料。</div>
+    <div class="card-footer">
+      <a class="card-event" href="https://x.com/Shunsuke_Hanato/status/2063080275186459023" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+        <span>Headless360を見せ合う会</span>
+      </a>
+      <span class="card-arrow">→</span>
+    </div>
+  </div>
+
+  <!-- ▲ headless360カードここまで ▲ -->
+
+  <!-- ▲ ここまで。次の資料はこの下にコピペ ▲ -->
+
+</div>
+
+<footer>
+  <p>© 2026 株式会社アップス・アンド・パートナーズ</p>
+  <p><a href="https://apps-p.com" target="_blank">apps-p.com</a></p>
+</footer>
+
+</body>
+</html>
